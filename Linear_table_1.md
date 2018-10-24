@@ -14,7 +14,7 @@ typedef struct
 ```C++
 status Initlist_sq(Sqlist &L)
 {
-	int m;
+    int m;
     L.elem = (Elemtype *)malloc(list_length*sizeof(Elemtype));
     if(!L.elem)
         exit(OVERFLOW);
