@@ -31,9 +31,9 @@ status Initlist_sq(Sqlist &L)
 ```
 2.在第i个位置插入数据<br>
 ```C++
-int insert_sq(Sqlist &L,int i,Elemtype e)
+int insert_sq(Sqlist &L,int i,Elemtype e)//i=位置；e=插入元素值
 {
-	  int m;
+    int m;
     Elemtype *newbase;
     if(i>L.listsize||i<0)return ERROR;
     if(L.length>=L.listsize)
@@ -58,7 +58,7 @@ int Delete_sq(Sqlist &L,int i,Elemtype &e)
 {
     if(i<1||i>L.length)return 0;
     e=L.elem[i-1];
-    for(;i<=L.length;i++)L.elem[i]=L.elem[i+1];
+    for(;i<=L.length;i++)L.elem[i-1]=L.elem[i];
     L.length--;
     return 1;
 }
