@@ -17,124 +17,68 @@ typedef struct{
 ## 各函数的实现
 ### 1.构造一个空队列
 ```C++
-status initqueue(linkqueue &q){
-    q.before=q.rear=(Queue)malloc(sizeof(node));
-    if(!q.before){
-        exit(OVERFLOW);
-    }
-    q.before->next=NULL;
-    return OK;
+Status InitQueue (LinkQueue &Q){
+	//构造一个空队列
+	Q.front=Q.rear=(QueuePtr)malloc(sizeof(QNode));
+	if(!Q.front) return ERROR;
+	Q.front->next=NULL;
+	return OK;
+}```
+### 2.判空
+```C++
+Status QueueEmpty(LinkQueue &Q){
+//判断Q是否为空, 若为空，则输出TRUE，否则输出FALSE
+	if(Q.front==Q.rear)
+		return TRUE;
+	return FALSE;
 }
 ```
-### 2.在队尾插入新的元素
+### 3.在队尾插入新的元素
 ```C++
-status enqueue(linkqueue &q,elemtype e){
-    Queue p;
-    p=(Queue)malloc(sizeof(node));
-    if(!p){
-        exit(OVERFLOW);
-    }
-    p->data=e;
-    p->next=NULL;
-    q.rear->next=p;
-    q.rear=p;
-    return OK;
+Status EnQueue(LinkQueue &Q,QElemType e){
+	//将元素e入队列
+	QueuePtr p;
+	p=(QueuePtr)malloc(sizeof(QNode));
+	if(!p) return ERROR;
+	p->data=e;
+	p->next=NULL;
+	Q.rear->next=p;
+	Q.rear=p;
+	return OK;
 }
 ```
 ### 3.删除队头元素，并返回其值
 ```C++
-status dequeue(linkqueue &q,elemtype &e){
-    Queue p;
-    if(q.before==q.rear){
-        return ERROR;
-    }
-    p=q.before->next;
-    e=p->data;
-    q.before->next=p->next;
-    if(q.rear==p){
-        q.rear=q.before;
-    }
-    free(p);
-    return OK;
+Status DeQueue(LinkQueue &Q,QElemType &e){
+	   //将元素e出队列
+	QueuePtr p;
+	if(Q.front==Q.rear)
+		return ERROR;
+	p=Q.front->next;
+	e=p->data;
+	Q.front->next=p->next;
+	if(Q.rear==p)         
+		Q.rear=Q.front;
+	free(p);
+	return OK;
 }
 ```
-### 4.构造一个空栈
+### 4.遍历队列Q
 ```C++
-status initstack(Stack &s){
-    s.base=(elemtype *)malloc(initsize*sizeof(elemtype));
-    if(!s.base)
-    {
-        exit(OVERFLOW);
-    }
-    s.top=s.base;
-    s.stacksize=initsize;
-    return OK;
-}
-```
-### 5.用e返回栈顶的值
-```C++
-status gettop(Stack s,elemtype &e){
-    if(s.base==s.top){
-        return ERROR;
-    }
-    e=*(s.top-1);
-    return OK;
-}
-```
-### 6.插入元素e为新的栈顶元素
-```C++
-status push(Stack &s,elemtype e){
-    if(s.top-s.base>=initsize){
-        elemtype newbase;
-        newbase=(elemtype)realloc(s.base,(s.stacksize+size_add)*sizeof(elemtype));
-        if(!newbase){
-            exit(OVERFLOW);
-        }
-        s.top=s.base+s.stacksize;
-        s.stacksize+=size_add;
-    }
-    *s.top++=e;
-    return OK;
-}
-```
-### 7.删除栈顶元素
-```C++
-status pop(Stack &s,elemtype &e){
-    if(s.base==s.top){
-        return ERROR;
-    }
-    e=*--s.top;
-    return OK;
-}
-```
-### 8.回文序列的判定
-```C++
-status palindrome_sequence(Stack &s,linkqueue &q){
-    if(initstack(s)&&initqueue(q)){
-        cout<<"栈构造成功！"<<endl;
-        cout<<"队列构造成功！"<<endl;
-    }
-    else{
-        cout<<"栈构造失败！"<<endl;
-        cout<<"队列构造失败！"<<endl;
-    }
-    int t=0;
-    elemtype e,e1,e2;
-    cout<<"请输入需要判定的序列的长度：";
-    cin>>t;
-    cout<<"请输入需要判定的序列："<<endl;
-    for(int i=0;i<t;i++){
-        cin>>e;
-        push(s,e);
-        enqueue(q,e);
-    }
-    for(int j=0;j<t;j++){
-        pop(s,e1);
-        dequeue(q,e2);
-        if(e1!=e2){
-            return FALSE;
-        }
-    }
-    return TRUE;
+Status QueueTraverse(LinkQueue Q){
+	//遍历输出队列Q
+	QueuePtr p;
+	if(Q.front==Q.rear)
+		cout<<"队列中没有元素"<<endl;
+	else{
+		p=Q.front->next;
+		cout<<"队列元素为：";
+		while(p){
+			cout<<p->data<<"->";
+			p=p->next;
+		}
+		cout<<endl;
+	}
+	return OK;
 }
 ```
