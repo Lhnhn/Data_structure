@@ -10,27 +10,29 @@ typedef struct{
 ## 相关函数
 ### 1.构造一个空栈
 ```C++
-int InitStack(SqStack &S)
-{
-    S.base=(Status *)malloc(100*sizeof(Status));
-    if(!S.base)return 0;
-    S.top=S.base;
-    S.stacksize=100;
-    return 1;
+Status InitStack(SqStack &S){
+//构造一个空栈
+	S.base = (SElemType *)malloc((STACK_INIT_SIZE) * sizeof(SElemType));
+	if(!S.base) return ERROR;
+	S.top=S.base;
+	S.stacksize=STACK_INIT_SIZE;
+	return OK;
 }
 ```
 ### 2.插入值为e的元素
 ```C++
-int Push(SqStack &S,Status e)
-{
-    if(S.top-S.base>=S.stacksize){
-        S.base=(Status *)realloc(S.base,(S.stacksize+10)*sizeof(Status));
-        if(!S.base)return 0;
-        S.top=S.base+S.stacksize;
-        S.stacksize+=10;
-    }
-    *S.top++=e;
-    return 1;
+Status Push(SqStack &S,SElemType e){
+//元素e入栈
+  SElemType * newbase;
+	if((S.base-S.top) >=S.stacksize){
+		newbase=(SElemType *)realloc
+			(S.base,(S.stacksize+STACKINCREMENT)*sizeof(SElemType));
+		if(!newbase) return ERROR;
+		S.base=newbase;
+		S.stacksize+=STACKINCREMENT;
+	}
+	*S.top++=e;
+	return OK;
 }
 ```
 ### 3.查找栈顶元素
@@ -44,14 +46,24 @@ int Gettop(SqStack &S,Status &e)
 ```
 ### 4.删除栈顶元素返回删除值
 ```C++
-int Pop(SqStack &S,Status &e)
-{
-    if(S.base==S.top)return 0;
-    e=*(--S.top);
-    return 1;
+Status Pop(SqStack &S,SElemType &e){
+//元素e出栈
+	if(S.base==S.top) return ERROR;
+	e=*--S.top;
+	return OK;
 }
 ```
-### 5.十进制转化为八进制
+### 5.判空
+```C++
+Status StackEmpty(SqStack S){
+   //如果栈为空，则返回TRUE，否则返回FALSE
+	if(S.base==S.top) 
+		return TRUE;
+	return FALSE;
+}
+```
+
+### 6.十进制转化为八进制
 ```C++
 void conversion()
 {
@@ -72,7 +84,7 @@ void conversion()
     cout<<endl;
 }
 ```
-### 6.判断括号是否匹配
+### 7.判断括号是否匹配
 ```C++
 void BMatching()
 {
